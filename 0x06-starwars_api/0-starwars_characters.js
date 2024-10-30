@@ -6,8 +6,7 @@ const movieId = process.argv[2];
 const url = `https://swapi.dev/api/films/${movieId}/`;
 
 request(url, (error, response, body) => {
-  if (error || response.statusCode !== 200) {
-    console.error('Error fetching data:', error || `Status code: ${response.statusCode}`);
+  if (error) {
     return;
   }
 
@@ -16,8 +15,7 @@ request(url, (error, response, body) => {
 
   characters.forEach((characterUrl) => {
     request(characterUrl, (error, response, body) => {
-      if (error || response.statusCode !== 200) {
-        console.error('Error fetching character:', error || `Status code: ${response.statusCode}`);
+      if (error) {
         return;
       }
 
