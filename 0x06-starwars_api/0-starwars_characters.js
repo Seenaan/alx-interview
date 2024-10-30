@@ -14,15 +14,23 @@ request(url, (error, response, body) => {
   const filmData = JSON.parse(body);
   const characters = filmData.characters;
 
-  characters.forEach((characterUrl) => {
-    request(characterUrl, (error, response, body) => {
-      if (error) {
-        console.error('Error fetching character:', error);
-        return;
-      }
-
-      const characterData = JSON.parse(body);
-      console.log(characterData.name);
+  let characterRequests = characters.map(characterUrl => {
+    return new Promise((resolve, reject) => {
+      request(characterUrl, (error, response, body) => {
+        if (error) {
+          return reject(error);
+        }
+        const characterData = JSON.parse(body);
+        resolve(characterData.name);
+      });
     });
   });
+
+  Promise.all(characterRequests)
+    .then(names => {
+      names.forEach(name => console.log(name));
+    })
+    .catch(err => {
+      console.error('Error fetching character:', err);
+    });
 });
