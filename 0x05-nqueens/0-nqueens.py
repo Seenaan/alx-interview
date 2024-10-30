@@ -26,6 +26,7 @@ def get_input():
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
+
     try:
         n = int(sys.argv[1])
     except Exception:
